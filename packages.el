@@ -78,7 +78,14 @@
 
   (setq org-agenda-span 'day)
 
-  (setq org-agenda-files (quote ("~/git/org")))
+  (setq org-agenda-files (quote ("~/workflow/main"
+                                 "~/workflow/work"
+                                 "~/workflow/work/machineLearning"
+                                 "~/workflow/work/program"
+                                 "~/workflow/work/quant"
+                                 "~/workflow/personal"
+                                 "~/workflow/interest")))
+
 
   ;; Do not dim blocked tasks
   (setq org-agenda-dim-blocked-tasks nil)
@@ -421,7 +428,7 @@ so change the default 'F' binding in the agenda to allow both"
   (setq org-agenda-skip-scheduled-if-deadline-is-shown  (quote repeated-after-deadline))
 
   (setq org-agenda-include-diary nil)
-  (setq org-agenda-diary-file "~/git/org/diary.org")
+  (setq org-agenda-diary-file "~/workflow/main/diary.org")
   (setq org-agenda-insert-diary-extract-time t)
 
   ;; Include agenda archive files when searching for things
@@ -432,7 +439,7 @@ so change the default 'F' binding in the agenda to allow both"
   (spacemacs|use-package-add-hook org
     :post-config
     (progn
-      (setq org-default-notes-file "~/git/org/refile.org")
+      (setq org-default-notes-file "~/workflow/main/refile.org")
 
       (require 'org-id)
       (defun bh/clock-in-task-by-id (id)
@@ -543,27 +550,27 @@ so change the default 'F' binding in the agenda to allow both"
                 ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
                 ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
-  (setq org-directory "~/git/org")
+  (setq org-directory "~/workflow/main")
 
   ;; Capture templates for: TODO tasks, Notes, appointments, phone calls,
   ;; meetings, and org-protocol
-  (setq org-capture-templates
-        (quote (("t" "todo" entry (file "~/git/org/refile.org")
-                 "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
-                ("r" "respond" entry (file "~/git/org/refile.org")
-                 "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
-                ("n" "note" entry (file "~/git/org/refile.org")
-                 "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
-                ("j" "Journal" entry (file+datetree "~/git/org/diary.org")
-                 "* %?\n%U\n" :clock-in t :clock-resume t)
-                ("w" "org-protocol" entry (file "~/git/org/refile.org")
-                 "* TODO Review %c\n%U\n" :immediate-finish t)
-                ("m" "Meeting" entry (file "~/git/org/refile.org")
-                 "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
-                ("p" "Phone call" entry (file "~/git/org/refile.org")
-                 "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
-                ("h" "Habit" entry (file "~/git/org/refile.org")
-                 "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"))))
+(setq org-capture-templates
+      (quote (("t" "todo" entry (file "~/workflow/main/refile.org")
+               "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+              ("r" "respond" entry (file "~/workflow/main/refile.org")
+               "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
+              ("n" "note" entry (file "~/workflow/main/refile.org")
+               "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+              ("j" "Journal" entry (file+datetree "~/workflow/main/diary.org")
+               "* %?\n%U\n" :clock-in t :clock-resume t)
+              ("w" "org-protocol" entry (file "~/workflow/main/refile.org")
+               "* TODO Review %c\n%U\n" :immediate-finish t)
+              ("m" "Meeting" entry (file "~/workflow/main/refile.org")
+               "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
+              ("p" "Phone call" entry (file "~/workflow/main/refile.org")
+               "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
+              ("h" "Habit" entry (file "~/workflow/main/refile.org")
+               "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"))))
 
   ;; Remove empty LOGBOOK drawers on clock out
   (defun bh/remove-empty-drawer-on-clock-out ()
@@ -757,23 +764,23 @@ A prefix arg forces clock in of the default task."
   (setq org-global-properties (quote (("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")
                                       ("STYLE_ALL" . "habit"))))
   ;; Tags with fast selection keys
+                                        ; Tags with fast selection keys
   (setq org-tag-alist (quote ((:startgroup)
-                              ("@errand" . ?e)
-                              ("@office" . ?o)
-                              ("@home" . ?H)
-                              ("@farm" . ?f)
-                              (:endgroup)
-                              ("WAITING" . ?w)
-                              ("HOLD" . ?h)
-                              ("PERSONAL" . ?P)
-                              ("WORK" . ?W)
-                              ("FARM" . ?F)
-                              ("ORG" . ?O)
-                              ("NORANG" . ?N)
-                              ("crypt" . ?E)
-                              ("NOTE" . ?n)
-                              ("CANCELLED" . ?c)
-                              ("FLAGGED" . ??))))
+                            ("@office" . ?o)
+                            ("@home" . ?H)
+                            ("@dormitory" . ?D)
+                            ("@cafebar" . ?C)
+                            (:endgroup)
+                            ("WAITING" . ?w)
+                            ("HOLD" . ?h)
+                            ("PERSONAL" . ?P)
+                            ("WORK" . ?W)
+                            ("EMACS" . ?e)
+                            ("ORG" . ?O)
+                            ("crypt" . ?E)
+                            ("NOTE" . ?n)
+                            ("CANCELLED" . ?c)
+                            ("FLAGGED" . ??))))
 
   ;; Allow setting single tags without the menu
   (setq org-fast-tag-selection-single-key (quote expert))
@@ -1067,8 +1074,8 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
   ;; (require 'ox-latex)
   ;; (require 'ox-ascii)
 
-  (setq org-ditaa-jar-path "~/git/org-mode/contrib/scripts/ditaa.jar")
-  (setq org-plantuml-jar-path "~/java/plantuml.jar")
+  (setq org-ditaa-jar-path "~/workflow/contrib/ditaa.jar")
+  (setq org-plantuml-jar-path "~/workflow/contrib/plantuml.jar")
 
   (add-hook 'org-babel-after-execute-hook 'bh/display-inline-images 'append)
 
@@ -1315,4 +1322,6 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
   ;; (setq org-show-entry-below (quote ((default))))
   )
 
+'(org-refile-targets (quote (("newgtd.org" :maxlevel . 1)
+                             ("someday.org" :level . 2))))
 ;; EOF
