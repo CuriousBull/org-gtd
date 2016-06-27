@@ -722,7 +722,7 @@ as the default task."
             (when bh/keep-clock-running
               (bh/clock-in-default-task)))))))
 
-  (defvar bh/organization-task-id "e2fb68ed-2c63-4f32-9fa3-9ce17349191e")
+(defvar bh/organization-task-id "09c19fbb-6ec9-4e31-8a49-b4d4181f6150")
 
   (defun bh/clock-out-maybe ()
     (when (and bh/keep-clock-running
@@ -1092,7 +1092,7 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
    (quote ((emacs-lisp . t)
            (dot . t)
            (ditaa . t)
-           (R . t)
+           ;;(R . t)
            (python . t)
            (ruby . t)
            (gnuplot . t)
