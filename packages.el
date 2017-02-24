@@ -79,13 +79,11 @@
   (setq org-agenda-span 'day)
 
   (setq org-agenda-files (quote ("~/workflow/main"
+                                 "~/workflow/interest"
                                  "~/workflow/work"
-                                 "~/workflow/work/machineLearning"
-                                 "~/workflow/work/program"
-                                 "~/workflow/work/quant"
-                                 "~/workflow/personal"
-                                 "~/workflow/interest")))
+                                 "~/workflow")))
 
+  (setq org-directory "~/workflow/main")
 
   ;; Do not dim blocked tasks
   (setq org-agenda-dim-blocked-tasks nil)
@@ -433,6 +431,70 @@ so change the default 'F' binding in the agenda to allow both"
 
   ;; Include agenda archive files when searching for things
   (setq org-agenda-text-search-extra-files (quote (agenda-archives)))
+
+(require 'ox-publish)
+(add-to-list 'org-latex-classes '("ctexart" "\\documentclass[11pt]{ctexart}
+				  [NO-DEFAULT-PACKAGES]
+				  \\usepackage[utf8]{inputenc}
+				  \\usepackage[T1]{fontenc}
+				  \\usepackage{fixltx2e}
+				  \\usepackage{graphicx}
+				  \\usepackage{longtable}
+				  \\usepackage{float}
+				  \\usepackage{wrapfig}
+				  \\usepackage{rotating}
+				  \\usepackage[normalem]{ulem}
+				  \\usepackage{amsmath}
+				  \\usepackage{textcomp}
+				  \\usepackage{marvosym}
+				  \\usepackage{wasysym}
+				  \\usepackage{amssymb}
+				  \\usepackage{booktabs}
+				  \\usepackage[colorlinks,linkcolor=black,anchorcolor=black,citecolor=black]{hyperref}
+				  \\tolerance=1000
+				  \\usepackage{listings}
+				  \\usepackage{xcolor}
+				  \\lstset{
+				  %行号
+				  numbers=left,
+				  %背景框
+				  framexleftmargin=10mm,
+				  frame=none,
+				  %背景色
+				  %backgroundcolor=\\color[rgb]{1,1,0.76},
+				  backgroundcolor=\\color[RGB]{245,245,244},
+				  %样式
+				  keywordstyle=\\bf\\color{blue},
+				  identifierstyle=\\bf,
+				  numberstyle=\\color[RGB]{0,192,192},
+				  commentstyle=\\it\\color[RGB]{0,96,96},
+				  stringstyle=\\rmfamily\\slshape\\color[RGB]{128,0,0},
+				  %显示空格
+				  showstringspaces=false
+				  }
+				  "
+				  ("\\section{%s}" . "\\section*{%s}")
+				  ("\\subsection{%s}" . "\\subsection*{%s}")
+				  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+				  ("\\paragraph{%s}" . "\\paragraph*{%s}")
+				  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+;; {{ export org-mode in Chinese into PDF
+;; @see http://freizl.github.io/posts/tech/2012-04-06-export-orgmode-file-in-Chinese.html
+;; and you need install texlive-xetex on different platforms
+;; To install texlive-xetex:
+;;    `sudo USE="cjk" emerge texlive-xetex` on Gentoo Linux
+;; }}
+(setq org-latex-default-class "ctexart")
+(setq org-latex-pdf-process
+      '(
+	"xelatex -interaction nonstopmode -output-directory %o %f"
+	"xelatex -interaction nonstopmode -output-directory %o %f"
+	"xelatex -interaction nonstopmode -output-directory %o %f"
+	"rm -fr %b.out %b.log %b.tex auto"))
+
+(setq org-latex-listings t)
+
   )
 
 (defun gtd/pre-init-org ()
@@ -440,7 +502,6 @@ so change the default 'F' binding in the agenda to allow both"
     :post-config
     (progn
       (setq org-default-notes-file "~/workflow/main/refile.org")
-
       (require 'org-id)
       (defun bh/clock-in-task-by-id (id)
         "Clock in a task by id"
@@ -488,7 +549,6 @@ so change the default 'F' binding in the agenda to allow both"
   (global-set-key (kbd "C-<f10>") 'next-buffer)
   (global-set-key (kbd "S-<f11>") 'org-clock-goto)
   (global-set-key (kbd "C-<f11>") 'org-clock-in)
-  ;; (global-set-key (kbd "C-s-<f12>") 'bh/save-then-publish)
 
   (defun bh/hide-other ()
     (interactive)
@@ -522,17 +582,17 @@ so change the default 'F' binding in the agenda to allow both"
         (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
                 (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
 
-  ;; ;; TODO Other todo keywords doesn't have appropriate faces yet. They should
-  ;; ;; have faces similar to spacemacs defaults.
-  ;; (setq org-todo-keyword-faces
-  ;;       (quote (("TODO" :foreground "red" :weight bold)
-  ;;               ("NEXT" :foreground "blue" :weight bold)
-  ;;               ("DONE" :foreground "forest green" :weight bold)
-  ;;               ("WAITING" :foreground "orange" :weight bold)
-  ;;               ("HOLD" :foreground "magenta" :weight bold)
-  ;;               ("CANCELLED" :foreground "forest green" :weight bold)
-  ;;               ("MEETING" :foreground "forest green" :weight bold)
-  ;;               ("PHONE" :foreground "forest green" :weight bold))))
+  ;; TODO Other todo keywords doesn't have appropriate faces yet. They should
+  ;; have faces similar to spacemacs defaults.
+  (setq org-todo-keyword-faces
+        (quote (("TODO" :foreground "red" :weight bold)
+                ("NEXT" :foreground "blue" :weight bold)
+                ("DONE" :foreground "forest green" :weight bold)
+                ("WAITING" :foreground "orange" :weight bold)
+                ("HOLD" :foreground "magenta" :weight bold)
+                ("CANCELLED" :foreground "forest green" :weight bold)
+                ("MEETING" :foreground "forest green" :weight bold)
+                ("PHONE" :foreground "forest green" :weight bold))))
 
   ;; (setq org-use-fast-todo-selection t)
 
@@ -549,8 +609,6 @@ so change the default 'F' binding in the agenda to allow both"
                 ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
                 ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
                 ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
-
-  (setq org-directory "~/workflow/main")
 
   ;; Capture templates for: TODO tasks, Notes, appointments, phone calls,
   ;; meetings, and org-protocol
@@ -597,18 +655,18 @@ so change the default 'F' binding in the agenda to allow both"
   ;; Allow refile to create parent tasks with confirmation
   (setq org-refile-allow-creating-parent-nodes (quote confirm))
 
-  ;;   ;; ;; Use IDO for both buffer and file completion and ido-everywhere to t
-  ;;   ;; (setq org-completion-use-ido t)
-  ;;   ;; (setq ido-everywhere t)
-  ;;   ;; (setq ido-max-directory-size 100000)
-  ;;   ;; (ido-mode (quote both))
-  ;;   ;; ;; Use the current window when visiting files and buffers with ido
-  ;;   ;; (setq ido-default-file-method 'selected-window)
-  ;;   ;; (setq ido-default-buffer-method 'selected-window)
-  ;;   ;; ;; Use the current window for indirect buffer display
-  ;;   ;; (setq org-indirect-buffer-display 'current-window)
+  ;; ;; Use IDO for both buffer and file completion and ido-everywhere to t
+  ;; (setq org-completion-use-ido t)
+  ;; (setq ido-everywhere t)
+  ;; (setq ido-max-directory-size 100000)
+  ;; (ido-mode (quote both))
+  ;; ;; Use the current window when visiting files and buffers with ido
+  ;; (setq ido-default-file-method 'selected-window)
+  ;; (setq ido-default-buffer-method 'selected-window)
+  ;; ;; Use the current window for indirect buffer display
+  ;; (setq org-indirect-buffer-display 'current-window)
 
-;;;; Refile settings
+  ;; Refile settings
   ;; Exclude DONE state tasks from refile targets
   (defun bh/verify-refile-target ()
     "Exclude todo keywords with a done state from refile targets"
@@ -722,7 +780,7 @@ as the default task."
             (when bh/keep-clock-running
               (bh/clock-in-default-task)))))))
 
-(defvar bh/organization-task-id "09c19fbb-6ec9-4e31-8a49-b4d4181f6150")
+(defvar bh/organization-task-id "126415bc-d169-488e-a2d6-42670f9440aa")
 
   (defun bh/clock-out-maybe ()
     (when (and bh/keep-clock-running
@@ -1074,8 +1132,8 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
   ;; (require 'ox-latex)
   ;; (require 'ox-ascii)
 
-  (setq org-ditaa-jar-path "~/workflow/contrib/ditaa.jar")
-  (setq org-plantuml-jar-path "~/workflow/contrib/plantuml.jar")
+  (setq org-plantuml-jar-path "~/.spacemacs.d/plantuml.jar")
+  (setq org-ditaa-jar-path "~/.spacemacs.d/ditaa.jar")
 
   (add-hook 'org-babel-after-execute-hook 'bh/display-inline-images 'append)
 
@@ -1092,6 +1150,7 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
    (quote ((emacs-lisp . t)
            (dot . t)
            (ditaa . t)
+           (C . t)
            ;;(R . t)
            (python . t)
            (ruby . t)
